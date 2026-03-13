@@ -49,6 +49,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(IREERuntime)
 
+# nlohmann_json: hipdnn's local build tree does not produce install-style CMake
+# artifacts (nlohmann_jsonTargets.cmake is missing from json-build/). Skip the
+# broken find_dependency(nlohmann_json) in hipdnn_data_sdkConfig.cmake and let
+# hipdnn_data_sdkTargets.cmake define the nlohmann_json imported target directly
+# (it already carries the correct include directories).
+set(HIPDNN_FRONTEND_SKIP_JSON_LIB ON CACHE BOOL
+  "Skip find_dependency(nlohmann_json) in hipdnn_data_sdk — target is provided by the export set." FORCE)
+
 # Other dependencies
 find_package(hip CONFIG REQUIRED)
 find_package(hipdnn_data_sdk CONFIG REQUIRED)
